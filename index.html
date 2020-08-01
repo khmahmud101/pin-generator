@@ -44,7 +44,7 @@
                             </div>
                             <div>
                                 <button type="submit" id="submitBtn" class="submit-btn">Submit</button>
-                                <p class="action-left">3 try left</p>
+                                <p class="action-left"><span id="tryLeftNumber">3</span> try left</p>
                             </div>
                     </div>
                 </div>
@@ -53,6 +53,7 @@
         <div class="notify-section">
             <p class="notify" id="wrongNotify">❌ Pin Didn't Match, Please try again</p>
             <p class="notify" id="rightNotify">✅ Pin Matched... Secret door is opening for you</p>
+            
         </div>
     </div>
     <script>
@@ -77,21 +78,50 @@
             document.getElementById('displayInputForMatching').value = result;
                 
         }
-
+        
         // after click submit button call generated pin and test input pin then matched each other.
         submitBtn = document.getElementById('submitBtn').addEventListener('click',function(){
             var currentGeneratedPin = document.getElementById('generatedPinDisplay').value;
             var currentInputForMatching = document.getElementById('displayInputForMatching').value;
-            
-            if(currentGeneratedPin == currentInputForMatching){
+            // empty input check
+            if (currentInputForMatching == "" || currentGeneratedPin == "" ){
+                alert("Empty Input or not generate pin");
+                return;
+            }
+
+            // attempt count 
+            var currentLimitNumber = document.getElementById('tryLeftNumber').innerText;
+            currentLimitNumber = parseFloat(currentLimitNumber);
+            if(currentLimitNumber == 0){
+                document.getElementById('tryLeftNumber').innerText = "No limit to try";
+                document.getElementById('displayInputForMatching').value = null; 
+                document.getElementById("wrongNotify").style.display = "none";
+                document.getElementById("rightNotify").style.display = "none";
+                
+            }
+            else if(currentLimitNumber > 0){
+                currentLimitNumber = currentLimitNumber - 1;
+                document.getElementById('tryLeftNumber').innerText = currentLimitNumber;
+                
+                if(currentGeneratedPin === currentInputForMatching){
                 document.getElementById("rightNotify").style.display = "block";
                 document.getElementById("wrongNotify").style.display = "none";
+                document.getElementById('tryLeftNumber').innerText = 3;
             }
-            else{
+                else{
                 document.getElementById("wrongNotify").style.display = "block";
                 document.getElementById("rightNotify").style.display = "none";
 
             }
+            }
+
+            
+
+           
+
+           
+
+            
           
         })
 
